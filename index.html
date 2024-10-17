@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Calculator</title>
+    <style>
+        body {
+            background-color: purple;
+            font-family: 'Times New Roman', Times, serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-icon {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            font-size: 30px;
+            color: white;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #333;
+            display: none;
+            flex-direction: column;
+            padding-top: 20px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar button {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .sidebar button:hover {
+            background-color: #444;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: green;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Times New Roman', Times, serif;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #f0f0f0;
+        }
+
+        input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section#home {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu Icon -->
+    <div class="menu-icon" onclick="toggleMenu()">
+        <div class="icon">☰</div> 
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button onclick="navigateTo('home')">Home</button>
+        <button onclick="navigateTo('bmi')">BMI Calculator</button>
+        <button onclick="navigateTo('bmr')">BMR Calculator</button>
+        <button onclick="navigateTo('ideal-height')">Ideal Height Calculator</button>
+        <button onclick="navigateTo('ideal-weight')">Ideal Weight Calculator</button>
+        <button onclick="navigateTo('caloric-needs')">Caloric Needs Calculator</button>
+        <button onclick="cancelMenu()">Cancel</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div id="home" class="section">
+            <h1>Welcome to Health Calculator</h1>
+            <p>Select a calculation from the options below to get started!</p>
+
+            <button onclick="navigateTo('bmi')">BMI Calculator</button>
+            <button onclick="navigateTo('bmr')">BMR Calculator</button>
+            <button onclick="navigateTo('ideal-height')">Ideal Height Calculator</button>
+            <button onclick="navigateTo('ideal-weight')">Ideal Weight Calculator</button>
+            <button onclick="navigateTo('caloric-needs')">Caloric Needs Calculator</button>
+        </div>
+
+        <div id="bmi" class="section">
+            <h2>BMI Calculator</h2>
+            <p>BMI (Body Mass Index) helps you determine if you are underweight, healthy, or overweight by comparing your weight to your height. It’s a common measure for overall health.</p>
+            <input type="number" id="heightFeet" placeholder="Height (Feet)">
+            <input type="number" id="heightCm" placeholder="Height (cm)">
+            <input type="number" id="weight" placeholder="Weight (kg)">
+            <button onclick="calculateBMI()">Calculate BMI</button>
+            <p id="bmi-result"></p>
+            <button onclick="navigateTo('home')">Home</button>
+        </div>
+
+        <div id="bmr" class="section">
+            <h2>BMR Calculator</h2>
+            <p>BMR (Basal Metabolic Rate) is the number of calories your body needs to function while at rest.</p>
+            <input type="number" id="bmrWeight" placeholder="Weight (kg)">
+            <input type="number" id="bmrHeightFeet" placeholder="Height (Feet)">
+            <input type="number" id="bmrHeightCm" placeholder="Height (cm)">
+            <input type="number" id="age" placeholder="Age">
+            <input type="text" id="gender" placeholder="Gender (M/F)">
+            <button onclick="calculateBMR()">Calculate BMR</button>
+            <p id="bmr-result"></p>
+            <button onclick="navigateTo('home')">Home</button>
+        </div>
+
+        <div id="ideal-height" class="section">
+            <h2>Ideal Height Calculator</h2>
+            <p>Calculate your ideal height based on your weight, age, and gender.</p>
+            <input type="number" id="idealHeightWeight" placeholder="Weight (kg)">
+            <input type="number" id="idealHeightAge" placeholder="Age">
+            <input type="text" id="idealHeightGender" placeholder="Gender (M/F)">
+            <button onclick="calculateIdealHeight()">Calculate Ideal Height</button>
+            <p id="ideal-height-result"></p>
+            <button onclick="navigateTo('home')">Home</button>
+        </div>
+
+        <div id="ideal-weight" class="section">
+            <h2>Ideal Weight Calculator</h2>
+            <p>Calculate your ideal weight based on your height and age.</p>
+            <input type="number" id="idealWeightHeightFeet" placeholder="Height (Feet)">
+            <input type="number" id="idealWeightHeightCm" placeholder="Height (cm)">
+            <input type="number" id="idealWeightAge" placeholder="Age">
+            <button onclick="calculateIdealWeight()">Calculate Ideal Weight</button>
+            <p id="ideal-weight-result"></p>
+            <button onclick="navigateTo('home')">Home</button>
+        </div>
+
+        <div id="caloric-needs" class="section">
+            <h2>Caloric Needs Calculator</h2>
+            <p>Calculate your daily caloric needs based on weight, height, age, and activity level.</p>
+            <input type="number" id="caloricWeight" placeholder="Weight (kg)">
+            <input type="number" id="caloricHeightFeet" placeholder="Height (Feet)">
+            <input type="number" id="caloricHeightCm" placeholder="Height (cm)">
+            <input type="number" id="caloricAge" placeholder="Age">
+            <select id="caloricActivity">
+                <option value="sedentary">Sedentary</option>
+                <option value="moderately active">Moderately Active</option>
+                <option value="very active">Very Active</option>
+            </select>
+            <button onclick="calculateCaloricNeeds()">Calculate Caloric Needs</button>
+            <p id="caloric-result"></p>
+            <button onclick="navigateTo('home')">Home</button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle the menu
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Function to navigate between sections/pages
+        function navigateTo(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Function to hide the menu bar
+        function cancelMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.display = 'none';
+        }
+
+        // Hide sidebar if clicked outside
+        window.onclick = function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuIcon = document.querySelector('.menu-icon');
+            if (sidebar.style.display === 'block' && !sidebar.contains(event.target) && !menuIcon.contains(event.target)) {
+                sidebar.style.display = 'none';
+            }
+        };
+
+        // BMI Calculation
+        function calculateBMI() {
+            const heightFeet = parseFloat(document.getElementById('heightFeet').value) || 0;
+            const heightCm = parseFloat(document.getElementById('heightCm').value) || 0;
+            const weight = parseFloat(document.getElementById('weight').value);
+
+            let heightInMeters;
+            if (heightFeet > 0) {
+                heightInMeters = (heightFeet * 30.48) / 100;
+            } else {
+                heightInMeters = heightCm / 100;
+            }
+
+            const bmi = weight / (heightInMeters * heightInMeters);
+            document.getElementById('bmi-result').innerText = 'Your BMI is: ' + bmi.toFixed(2);
+        }
+
+        // BMR Calculation
+        function calculateBMR() {
+            const weight = parseFloat(document.getElementById('bmrWeight').value);
+            const heightFeet = parseFloat(document.getElementById('bmrHeightFeet').value) || 0;
+            const heightCm = parseFloat(document.getElementById('bmrHeightCm').value) || 0;
+            const age = parseFloat(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+
+            let heightInCm;
+            if (heightFeet > 0) {
+                heightInCm = heightFeet * 30.48;
+            } else {
+                heightInCm = heightCm;
+            }
+
+            let bmr;
+            if (gender.toLowerCase() === 'm') {
+                bmr = 88.362 + (13.397 * weight) + (4.799 * heightInCm) - (5.677 * age);
+            } else if (gender.toLowerCase() === 'f') {
+                bmr = 447.593 + (9.247 * weight) + (3.098 * heightInCm) - (4.330 * age);
+            } else {
+                bmr = 'Invalid gender input';
+            }
+
+            document.getElementById('bmr-result').innerText = 'Your BMR is: ' + bmr;
+        }
+
+        // Ideal Height Calculation
+        function calculateIdealHeight() {
+            const weight = parseFloat(document.getElementById('idealHeightWeight').value);
+            const age = parseFloat(document.getElementById('idealHeightAge').value);
+            const gender = document.getElementById('idealHeightGender').value;
+
+            let idealHeight;
+            // Placeholder formula for demonstration
+            if (gender.toLowerCase() === 'm') {
+                idealHeight = (weight + age) / 2;
+            } else if (gender.toLowerCase() === 'f') {
+                idealHeight = (weight + age) / 2.2;
+            } else {
+                idealHeight = 'Invalid gender input';
+            }
+
+            document.getElementById('ideal-height-result').innerText = 'Your Ideal Height is: ' + idealHeight + ' cm';
+        }
+
+        // Ideal Weight Calculation
+        function calculateIdealWeight() {
+            const heightFeet = parseFloat(document.getElementById('idealWeightHeightFeet').value) || 0;
+            const heightCm = parseFloat(document.getElementById('idealWeightHeightCm').value) || 0;
+            const age = parseFloat(document.getElementById('idealWeightAge').value);
+
+            let heightInCm;
+            if (heightFeet > 0) {
+                heightInCm = heightFeet * 30.48;
+            } else {
+                heightInCm = heightCm;
+            }
+
+            const idealWeight = (heightInCm - 100 + age / 10) * 0.9;
+            document.getElementById('ideal-weight-result').innerText = 'Your Ideal Weight is: ' + idealWeight.toFixed(2) + ' kg';
+        }
+
+        // Caloric Needs Calculation
+        function calculateCaloricNeeds() {
+            const weight = parseFloat(document.getElementById('caloricWeight').value);
+            const heightFeet = parseFloat(document.getElementById('caloricHeightFeet').value) || 0;
+            const heightCm = parseFloat(document.getElementById('caloricHeightCm').value) || 0;
+            const age = parseFloat(document.getElementById('caloricAge').value);
+            const activity = document.getElementById('caloricActivity').value;
+
+            let heightInCm;
+            if (heightFeet > 0) {
+                heightInCm = heightFeet * 30.48;
+            } else {
+                heightInCm = heightCm;
+            }
+
+            let caloricNeeds = (10 * weight) + (6.25 * heightInCm) - (5 * age);
+            if (activity === 'sedentary') {
+                caloricNeeds *= 1.2;
+            } else if (activity === 'moderately active') {
+                caloricNeeds *= 1.55;
+            } else if (activity === 'very active') {
+                caloricNeeds *= 1.725;
+            }
+
+            document.getElementById('caloric-result').innerText = 'Your Caloric Needs are: ' + caloricNeeds.toFixed(2) + ' kcal/day';
+        }
+    </script>
+
+</body>
+</html>
